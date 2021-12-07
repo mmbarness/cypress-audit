@@ -44,9 +44,9 @@ const lighthouseCommandHandler = (thresholds, opts, config) => {
         });
         cy.log("-----------------------------");
 
-        return cy.wrap(errors);
+        return cy.wrap({errors, results});
       })
-      .then((errors) => {
+      .then(({errors, results}) => {
         if (errors.length > 0) {
           const formatedErrors = `\n\n${errors.join("\n")}`;
 
@@ -55,7 +55,8 @@ const lighthouseCommandHandler = (thresholds, opts, config) => {
               ? `cy.lighthouse - A threshold has been crossed.${formatedErrors}`
               : `cy.lighthouse - Some thresholds have been crossed.${formatedErrors}`;
           throw new Error(label);
-        }
+        } 
+        return cy.wrap(results)
       });
   });
 };
